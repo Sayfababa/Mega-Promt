@@ -17,6 +17,7 @@ import { SKILL_BY_ID, BASIC_ATTACK } from '../../content/skills/guardian';
 import { Rng } from '../core/rng';
 import { roundHalfUp } from '../core/fixedPoint';
 import { fnv1a, stableStringify } from '../core/hash';
+
 import type { DerivedStats, StatMap } from '../stats/aggregate';
 import {
   physicalReduction, effectiveResistance, capCrit, capCritMulti, capBlock, capBlockPower, capEvasion, capAps, capCdr, capLeech,
@@ -196,15 +197,23 @@ function effectiveArmor(e: Entity): number {
 
 function incFor(e: Entity, tags: Tag[], target: Entity | null): number {
   let sum = 0;
-  const all = [...e.derived.incMods, ...statusMods(e).filter((m) => m.type === 'inc')] as (Modifier & { type: 'inc' })[];
-  for (const m of all) {
-    if (!checkCond(m.cond, e, target)) continue;
+  for (const m of e.derived.incMods) {
+    if (m.cond && !checkCond(m.cond, e, target)) continue;
     if (m.tags.every((t) => tags.includes(t))) sum += m.value;
+  }
+  for (const st of e.statuses) {
+    if (!st.mods) continue;
+    for (const m of st.mods) {
+      if (m.type !== 'inc') continue;
+      if (m.cond && !checkCond(m.cond, e, target)) continue;
+      if (m.tags.every((t) => tags.includes(t))) sum += m.value;
+    }
   }
   return sum;
 }
 
 function moreFor(e: Entity, tags: Tag[], target: Entity | null): number {
+  if (e.derived.moreMods.length === 0 && !e.statuses.some((x) => x.mods?.some((m) => m.type === 'more'))) return 1;
   const groups = new Map<string, number>();
   const all = [...e.derived.moreMods, ...statusMods(e).filter((m) => m.type === 'more')] as (Modifier & { type: 'more' })[];
   for (const m of all) {
@@ -281,23 +290,35 @@ export class CombatSim {
 
   // ---------------------------------------------------------------- logging
   private emit(ev: CombatEvent): void {
-    // rolling hash over every event (independent of recording → fast-forward == replay)
-    const s = stableStringify(ev);
+    // rolling FNV-1a hash over every event in a FIXED field order (independent of recording →
+    // fast-forward == replay). Numbers are hashed via their canonical string form.
     let h = this.hashState;
-    for (let i = 0; i < s.length; i++) {
-      h ^= s.charCodeAt(i);
+    const feed = (v: string | number | boolean | undefined): void => {
+      const str = v === undefined ? '~' : String(v);
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 0x01000193);
+      }
+      h ^= 0x7c;
       h = Math.imul(h, 0x01000193);
-    }
+    };
+    feed(ev.t); feed(ev.type); feed(ev.src); feed(ev.tgt); feed(ev.skill); feed(ev.v); feed(ev.crit); feed(ev.blocked);
+    feed(ev.absorbed); feed(ev.status); feed(ev.dtype); feed(ev.hp); feed(ev.barrier); feed(ev.mana); feed(ev.note);
     this.hashState = h >>> 0;
     if (this.record) this.events.push(ev);
   }
 
+  private orderCache: Entity[] | null = null;
+  /** initiative order: DEX desc, player first, then stable entity id (initiative is static per fight) */
   private ordered(): Entity[] {
-    return [...this.entities].sort((a, b) => {
-      if (b.initiative !== a.initiative) return b.initiative - a.initiative;
-      if (a.side !== b.side) return a.side === 'player' ? -1 : 1;
-      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
-    });
+    if (!this.orderCache) {
+      this.orderCache = [...this.entities].sort((a, b) => {
+        if (b.initiative !== a.initiative) return b.initiative - a.initiative;
+        if (a.side !== b.side) return a.side === 'player' ? -1 : 1;
+        return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+      });
+    }
+    return this.orderCache;
   }
 
   private opponentOf(e: Entity): Entity | null {

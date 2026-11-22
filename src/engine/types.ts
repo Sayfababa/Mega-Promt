@@ -263,6 +263,8 @@ export interface SkillDef {
   healPctMaxHp?: number;
   requiresSelfHpBelow?: number;
   defaultCondition: PriorityCondition;
+  /** character level required to equip (D-087 onboarding pacing) */
+  unlockLevel: number;
   description: string;
   icon: string;
 }
