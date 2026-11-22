@@ -1,0 +1,176 @@
+{
+  "balanceVersion": 1,
+  "bots": 100,
+  "overheadSecondsPerEncounter": 3,
+  "reachedL15": 1,
+  "milestones": {
+    "L5": {
+      "reachedShare": 1,
+      "medianRuns": 4,
+      "medianMinutes": 4.026666666666667
+    },
+    "L8": {
+      "reachedShare": 1,
+      "medianRuns": 9,
+      "medianMinutes": 9.866666666666667
+    },
+    "L10": {
+      "reachedShare": 1,
+      "medianRuns": 12,
+      "medianMinutes": 13.373333333333335
+    },
+    "L12": {
+      "reachedShare": 1,
+      "medianRuns": 16,
+      "medianMinutes": 19.543333333333337
+    },
+    "L15": {
+      "reachedShare": 1,
+      "medianRuns": 21,
+      "medianMinutes": 27.848333333333333
+    }
+  },
+  "medianDefeats": 0,
+  "medianItemsEquipped": 16,
+  "medianCrafts": 0,
+  "xpCurve": [
+    {
+      "level": 1,
+      "xpNext": 85
+    },
+    {
+      "level": 2,
+      "xpNext": 232
+    },
+    {
+      "level": 3,
+      "xpNext": 418
+    },
+    {
+      "level": 4,
+      "xpNext": 634
+    },
+    {
+      "level": 5,
+      "xpNext": 876
+    },
+    {
+      "level": 6,
+      "xpNext": 1142
+    },
+    {
+      "level": 7,
+      "xpNext": 1428
+    },
+    {
+      "level": 8,
+      "xpNext": 1733
+    },
+    {
+      "level": 9,
+      "xpNext": 2056
+    },
+    {
+      "level": 10,
+      "xpNext": 2395
+    },
+    {
+      "level": 11,
+      "xpNext": 2750
+    },
+    {
+      "level": 12,
+      "xpNext": 3120
+    },
+    {
+      "level": 13,
+      "xpNext": 3504
+    },
+    {
+      "level": 14,
+      "xpNext": 3902
+    },
+    {
+      "level": 15,
+      "xpNext": 4312
+    },
+    {
+      "level": 16,
+      "xpNext": 4735
+    },
+    {
+      "level": 17,
+      "xpNext": 5170
+    },
+    {
+      "level": 18,
+      "xpNext": 5617
+    },
+    {
+      "level": 19,
+      "xpNext": 6075
+    },
+    {
+      "level": 20,
+      "xpNext": 6545
+    }
+  ],
+  "riftTable": [
+    {
+      "tier": 1,
+      "hp": 1,
+      "dmg": 1,
+      "bossHp": 110000,
+      "minDps150": 733.3333333333334,
+      "minDps90": 1222.2222222222222
+    },
+    {
+      "tier": 10,
+      "hp": 2.357947691000002,
+      "dmg": 1.4860951404142546,
+      "bossHp": 259374.2460100002,
+      "minDps150": 1729.161640066668,
+      "minDps90": 2881.93606677778
+    },
+    {
+      "tier": 20,
+      "hp": 6.115909044841464,
+      "dmg": 2.3078603108491924,
+      "bossHp": 672749.9949325611,
+      "minDps150": 4484.999966217074,
+      "minDps90": 7474.999943695123
+    },
+    {
+      "tier": 30,
+      "hp": 15.863092971714952,
+      "dmg": 3.584036492379772,
+      "bossHp": 1744940.2268886447,
+      "minDps150": 11632.934845924297,
+      "minDps90": 19388.224743207164
+    },
+    {
+      "tier": 40,
+      "hp": 41.144777789250995,
+      "dmg": 5.565899079040611,
+      "bossHp": 4525925.55681761,
+      "minDps150": 30172.83704545073,
+      "minDps90": 50288.061742417885
+    },
+    {
+      "tier": 50,
+      "hp": 106.7189571633598,
+      "dmg": 8.643671074201357,
+      "bossHp": 11739085.287969578,
+      "minDps150": 78260.56858646385,
+      "minDps90": 130434.28097743976
+    }
+  ],
+  "lootSummary": {
+    "boss_mf0_candidatesPerKill": 0.0415,
+    "boss_mf0_realUniquesPerKill": 0.0023,
+    "boss_mf0_pAtLeastOneCandidateTheory": 0.04282937737500004,
+    "boss_mf200_candidatesPerKill": 0.0568,
+    "boss_mf200_realUniquesPerKill": 0.0029,
+    "boss_mf200_pAtLeastOneCandidateTheory": 0.059589000403800066
+  }
+}

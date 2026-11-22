@@ -1,0 +1,7 @@
+goal,strategy,trials,successRate,avgFORGE_DUST,avgARCANE_SHARD,avgESSENCE,avgBases,note
+Waffe mit lok. phys. % (p01),A: Prägen auf neuen Basen,2000,1.0000,46.38,11.59,0.00,11.59,Stopp: Ziel erreicht oder 200 Basen
+Waffe mit lok. phys. % (p01),B: Prägen→Anreichern→Selten→Ergänzen,2000,1.0000,11.39,30.70,4.44,2.85,Stopp: Ziel erreicht oder 50 Basen
+Ring mit Schattenresistenz (s14),A: Prägen auf neuen Basen,2000,0.9975,132.23,33.06,0.00,33.06,Stopp: Ziel erreicht oder 200 Basen
+Ring mit Schattenresistenz (s14),B: Prägen→Anreichern→Selten→Ergänzen,2000,0.9975,33.77,103.48,15.63,8.44,Stopp: Ziel erreicht oder 50 Basen
+Brust mit flachen LP (p13),A: Prägen auf neuen Basen,2000,1.0000,42.12,10.53,0.00,10.53,Stopp: Ziel erreicht oder 200 Basen
+Brust mit flachen LP (p13),B: Prägen→Anreichern→Selten→Ergänzen,2000,1.0000,10.27,27.02,3.87,2.57,Stopp: Ziel erreicht oder 50 Basen
