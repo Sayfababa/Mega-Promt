@@ -51,6 +51,12 @@ describe('stat aggregation (spec 3.1)', () => {
     expect(d.incMods.some((m) => m.tags.join() === 'BLEED' && Math.abs(m.value - 0.30) < 1e-9)).toBe(true);
     expect(d.triggers.map((t) => t.effectId)).toContain('u_bloodthirst_crit_bleed');
   });
+  it('Dornenpakt reflect fraction follows the unique roll (UI review finding)', () => {
+    const c = mkItem('c', 'chest_plate_t5', { rarity: 'unique', ilvl: 70, uniqueId: 'u_thornpact', uniqueRolls: [8] });
+    const d = aggregate({ classId: 'guardian', level: 60, allocated: none, equipment: { chest: c }, passives: [] });
+    const tr = d.triggers.find((t) => t.effectId === 'u_thornpact_reflect')!;
+    expect(tr.effect).toEqual({ kind: 'reflectPhysical', fraction: 0.08, capPctMaxHpPerSec: 0.05 });
+  });
   it('passive key nodes apply their trade-offs', () => {
     const base = aggregate({ classId: 'guardian', level: 15, allocated: none, equipment: {}, passives: [] });
     const d = aggregate({ classId: 'guardian', level: 15, allocated: none, equipment: {}, passives: ['g_k_berserker'] });

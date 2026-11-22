@@ -204,6 +204,8 @@ export interface TriggerDef {
   effect: TriggerEffect;
   /** hit must carry all of these tags (for onCrit/onAttackHit) */
   requireTags?: Tag[];
+  /** unique roll index that replaces the effect's fraction/value (value = roll / 100) */
+  rollIndex?: number;
 }
 
 /** special non-modifier rules toggled by uniques/passives */

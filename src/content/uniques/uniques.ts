@@ -40,7 +40,7 @@ export const UNIQUES: UniqueDef[] = [
     id: 'u_thornpact', name: 'Dornenpakt', baseId: 'chest_plate_t5', minItemLevel: 60, dropSource: 'boss_gatewarden',
     uniqueRolls: [{ min: 8, max: 10, unit: 'int', label: 'Reflexion %' }],
     mods: [{ type: 'stat', stat: 'incMaxHP', value: -0.08 }],
-    triggers: [{ effectId: 'u_thornpact_reflect', event: 'onHitTaken', chance: 1, icdMs: 0, effect: { kind: 'reflectPhysical', fraction: 0.09, capPctMaxHpPerSec: 0.05 } }],
+    triggers: [{ effectId: 'u_thornpact_reflect', event: 'onHitTaken', chance: 1, icdMs: 0, effect: { kind: 'reflectPhysical', fraction: 0.09, capPctMaxHpPerSec: 0.05 }, rollIndex: 0 }],
     tags: ['REFLECT'], tradeoff: '−8% maximale LP',
     text: ['{0}% des erlittenen blockbaren Direktschadens als physischer Gegentreffer (max. 5% max. LP pro Sekunde)', '−8% maximale LP'], internalCooldownMs: 0, icon: 'uniques/u_thornpact',
   },

@@ -175,7 +175,15 @@ export function aggregate(input: CharacterInput): DerivedStats {
       const u = UNIQUE_BY_ID[item.uniqueId];
       if (u) {
         uniqueIds.push(u.id);
-        triggers.push(...u.triggers);
+        for (const tr of u.triggers) {
+          const roll = tr.rollIndex !== undefined ? item.uniqueRolls?.[tr.rollIndex] : undefined;
+          if (roll === undefined) { triggers.push(tr); continue; }
+          const e = tr.effect;
+          const effect = e.kind === 'reflectPhysical' ? { ...e, fraction: roll / 100 }
+            : e.kind === 'gainBarrierPctMaxHp' || e.kind === 'nextAttackInc' ? { ...e, value: roll / 100 }
+            : e.kind === 'counterWeaponHit' ? { ...e, coefficient: roll / 100 } : e;
+          triggers.push({ ...tr, effect });
+        }
         if (u.special?.finisherMoreAtBleedStacks) {
           const roll = item.uniqueRolls?.[0];
           special.finisherMoreAtBleedStacks = {
