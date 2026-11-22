@@ -175,3 +175,15 @@ describe('crafting (spec 8 / 21)', () => {
     expect(validateCraft(lowT, 'tierUp', { affixIndex: 0 })).toMatch(/erlaubt/);
   });
 });
+
+describe('replay', () => {
+  it('replaying a stored encounter reproduces the stored event hash', async () => {
+    const { replayRunEncounter } = await import('../../engine/state/commands');
+    const s = run(fresh(), { type: 'START_RUN', dungeonId: 'forsaken_gate', monsterLevel: 1 }, { type: 'RESOLVE_RUN' });
+    for (let i = 0; i < s.activeRun!.encounters.length; i++) {
+      const r = replayRunEncounter(s.activeRun!, i);
+      expect(r.verified).toBe(true);
+      expect(r.result.events.length).toBeGreaterThan(5);
+    }
+  });
+});

@@ -554,3 +554,41 @@ Rechenwerte: `BALANCE_V1.md` (nachgerechnet mit `node -e`).
 - Problem: Ohne Elite gibt es im VS nur 1 Essenz/Run (Boss) — „Ergänzen“ kostet 1 Essenz.
 - Vorschlag: Letzte reguläre Begegnung jedes Dungeons ist Elite (Tor: 2N+1E+B; Krypta: 3N+1E+B).
 - Status: offen
+
+---
+
+## Implementierungsstand (Lead, nach Engine-Iteration 1)
+
+Die folgenden Einträge sind jetzt **entschieden und im Code umgesetzt**. Wo die Umsetzung vom obigen Vorschlag abweicht, ist das ausdrücklich vermerkt. Code-Kommentare verweisen auf diese IDs.
+
+| ID | Entscheidung (umgesetzt) | Ort |
+|---|---|---|
+| D-018 | GCD als Mindestabstand zwischen Aktions-**Beginnen**: `next = max(actionEnd, begin + max(350, gcd))`. Umschaltbar über `B.gcdFrom = 'actionEnd'` (wörtliche Lesart) für Vergleichsläufe. | `combat/simulate.ts`, `balance.ts` |
+| D-019 | Aktionsdauern in exakten ms; Auflösung im ersten Tick `t ≥ end`; nächste Aktion startet zur exakten Fälligkeit. Erster Ansatz (Aufrunden auf 100 ms) kostete ~7 % DPS und wurde vom Doku-Review gefunden und behoben. | `combat/simulate.ts` |
+| D-020 | Attack-Skills `1000/APS`; Buffs/Heilung/Barriere `castTimeMs = 500`; Spells (noch keine im Slice) 1 000 ms. | `content/skills/guardian.ts` |
+| D-021 | Mana und Cooldown bei `ACTION_BEGIN`. | `combat/simulate.ts` |
+| D-023 | Wie vorgeschlagen: nur eigene Stacks, gezählt bei Auflösung, danach entfernt. **Abweichung:** Stacks werden vor dem Ausweich-Wurf verbraucht (auch bei Ausweichen) – offen für Review. | `combat/simulate.ts` |
+| D-024 | Neuer Stack ersetzt den ältesten, Event `STATUS_EXPIRE` mit `note: replaced`. | `combat/simulate.ts` |
+| D-025 | **Abweichung:** DoT als Rate `dps = Snapshot / Basisdauer`; Ticks an globalen Sekundengrenzen über die verstrichene Zeit plus anteiliger Schluss-Tick beim Ablauf. Summe = `dps × tatsächliche Dauer` exakt; Daueränderungen verändern so den Gesamtschaden. | `combat/simulate.ts` |
+| D-026 / D-027 | Snapshot = Anteil × physischer **Basis**-Trefferwert (nach Koeffizient, vor increased/more/Krit) × `(1 + Σ increased mit DoT-Tags)` × more. Keine Doppelanrechnung, Krit erhöht den Snapshot nicht. | `combat/simulate.ts` `applyDot` |
+| D-028 | Leech nur ATTACK, Sekunden-Bucket, max 15 % maxHP/s, Basis = an Barriere+LP zugefügter Schaden ohne Overkill. | `combat/simulate.ts` |
+| D-029 | Blockstärke additiv, Cap 0.75 (Test: 55+15+10+8 → 75). | `stats/mitigation.ts` |
+| D-039 | „+A–B bis +C–D“: min ∈ [A,C], max ∈ [B,D], unabhängig gewürfelt, min ≤ max erzwungen. | `content/affixes/affixes.ts` |
+| D-046 | Slice-Uniques: 4 Endgame-Uniques mit echten Hooks (über Fixtures testbar) + Kupferner Reißer + Ausgefranster Mantel + 2 neue Low-Level-Hook-Uniques (Rostzahn, Grabherrs Schwur). | `content/uniques/uniques.ts` |
+| D-048 | Slice-Baum: 1 Wurzel, 8 kleine, 2 mittlere, 3 Schlüsselknoten (13 Punkte) – reicht bis Lv14. | `content/passives/guardian.ts` |
+| D-053 | XP bei Gegnern > 5 Stufen über dem Spieler gedeckelt auf 1,5 × XP derselben Begegnung auf Spielerstufe. | `progression/levels.ts` |
+| D-059 | Monsterdaten (Rüstung/Stufe, Initiative 10, Archetyp-Faktoren für Caster 0.9/1.1, Swarm 0.85/1.0, Corruptor 0.95/1.0) und Bossmechaniken Rostwächter (Rostschlag alle 6 s, 2,5×, Blutung) und Grabherr (Grabesfluch alle 8 s, 3×, Gift) festgelegt; Fähigkeiten liegen **im** DPS-Budget. | `content/monsters/monsters.ts`, `balance.ts` |
+| D-060 | Gleichzeitiger Tod beider Seiten = Niederlage. | `combat/simulate.ts` |
+| D-061 | Fester RNG-Verbrauch je Treffer (Krit, Ausweichen, Block, 2× Status) aus dem Stream des Angreifers; Trigger-Würfe aus eigenem Stream. | `combat/simulate.ts` |
+| D-062 | Spell-Basiskrit 5 %. | `combat/simulate.ts` |
+| D-077 | „Sinnvolles Waffen-Upgrade“: magische Waffe derselben Familie, neuester freigeschalteter Basis-Tier, garantiertes p01 oder p02 (gewichtet 90:85) + 1 Suffix. | `state/commands.ts` |
+| D-079 | Rare-Garantie: erster Bosssieg ab Charakterstufe 10 → zusätzliches Rare mit ≥ 4 Mods. | `state/commands.ts` |
+| D-081 *(neu)* | Jede Begegnung startet mit vollen LP/Mana (`B.carryHpBetweenEncounters = false`). Story-Dungeons behalten bei Niederlage die Belohnungen bereits gewonnener Begegnungen, Rifts nicht. | `balance.ts`, `run/run.ts`, `content/dungeons` |
+| D-082 *(neu)* | Magische Drops: 1 oder 2 Affixe (50/50). | `balance.ts` |
+| D-083 *(neu)* | Basiswahl: Gruppe nach Zonengewicht (Gruppen ohne Basis werden herausnormiert, z. B. Relikt im Slice), Familie gleichverteilt, neuester freigeschalteter Tier Gewicht 3, ältere 1. | `loot/generator.ts` |
+| D-084 *(neu)* | `p16 maximale Barriere` (flach): Startbarriere zu Kampfbeginn und Erhöhung des Barriere-Maximums um denselben Wert. Offen für Designreview. | `combat/simulate.ts` |
+| D-085 *(neu)* | Exklusivität pro Affix-**Familie** (`groupId = Familien-ID`), unabhängig vom Tier – „Familie + Tier = gleiche groupId“ hätte sonst zwei Tiers derselben Familie erlaubt. | `content/affixes/affixes.ts` |
+| D-086 *(neu)* | „Amulett +8 % eines wählbaren Hauptattributs“: vier Amulett-Basen mit festem Attribut. | `content/bases/bases.ts` |
+| D-087 *(neu)* | Skill-Freischaltung zum Onboarding: Spaltender Hieb 1, Rüstungsbruch 2, Schildwall 4, Bluternte 6, Kampfrausch 8, Letztes Bollwerk 10. Skill-Level 2–5 noch nicht erwerbbar (D-049 bleibt offen). | `content/skills/guardian.ts` |
+| D-088 *(neu)* | Dungeonstufe wählbar zwischen Mindeststufe und `höchste geschaffte + 1`; jeder Dungeon ist ab seiner Mindeststufe sofort betretbar (Krypta ab 8 → „zuvor schwieriger Boss“-Erlebnis). | `state/commands.ts` |
+| D-089 *(neu)* | Rift-Probe nur in Balance-Tooling/Buildlabor, UI hält Rifts bis Lv60 gesperrt (entspricht Vorschlag D-050). | `endgame/rifts.ts` |

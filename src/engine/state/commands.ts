@@ -16,7 +16,8 @@ import { hashOf } from '../core/hash';
 import { aggregate, type DerivedStats } from '../stats/aggregate';
 import { defaultPriority, playerCombatant } from '../combat/combatants';
 import { applyXp, respecPointCost, talentPointsForLevel } from '../progression/levels';
-import { resolveRun, type RunConfig } from '../run/run';
+import { buildEnemy, resolveRun, type RunConfig } from '../run/run';
+import { simulateCombat } from '../combat/simulate';
 import { affixRngs, blankItem, emptyTelemetry, generateItem, requiredLevel } from '../loot/generator';
 import { addRandomAffix } from '../loot/affixRoll';
 import { applyCraft, hasMaterials, RECIPE_BY_ID, validateCraft, type CraftParams, type RecipeId } from '../crafting/recipes';
@@ -462,3 +463,16 @@ function guaranteedWeaponUpgrade(s: GameState, derived: DerivedStats, cfg: RunCo
 }
 
 export { newGameState };
+
+/**
+ * Exact replay of a resolved encounter for the combat view (UI animates stored-seed events).
+ * Returns the full event log; `verified` is true when the replay hash equals the stored hash.
+ */
+export function replayRunEncounter(run: import('./gameState').RunState, index: number): { result: import('../combat/simulate').CombatResult; verified: boolean; enemyName: string; enemyMaxHp: number } {
+  const enc = run.encounters[index] ?? fail('Begegnung existiert nicht.');
+  const snap = run.playerSnapshot ?? fail('Kein Spieler-Snapshot.');
+  const cfg = runConfigFor(run.dungeonId, run.monsterLevel);
+  const enemy = buildEnemy(cfg, cfg.encounters[index]!, index);
+  const result = simulateCombat(snap, [enemy], { seed: enc.seed, record: true });
+  return { result, verified: result.eventHash === enc.eventHash, enemyName: enemy.name, enemyMaxHp: enemy.derived.maxHP };
+}
