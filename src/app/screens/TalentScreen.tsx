@@ -1,3 +1,6 @@
+import { hasAsset } from '../assets';
+import { passiveIcon } from '../../content/assets';
+import { GameImage } from '../components/GameImage';
 import { useState } from 'react';
 import { B } from '../../content/balance';
 import { CLASS_BY_ID } from '../../content/classes/classes';
@@ -74,7 +77,9 @@ export function TalentScreen() {
                     onDoubleClick={() => { if (!reason && n.size !== 'root') dispatch(actionFor(n).cmd); }}
                     data-testid={`node-${n.id}`}
                   >
-                    {n.size === 'key' ? '✦' : n.size === 'root' ? '◆' : n.size === 'medium' ? '◈' : '•'}
+                    {hasAsset(n.icon ?? passiveIcon(n.id))
+                      ? <GameImage icon={n.icon ?? passiveIcon(n.id)} alt={n.name} category="passive" size={n.size === 'key' ? 40 : n.size === 'small' ? 26 : 34} decorative flat />
+                      : n.size === 'key' ? '✦' : n.size === 'root' ? '◆' : n.size === 'medium' ? '◈' : '•'}
                   </button>
                   <span className="node-label" style={{ left: `${n.pos.x}%`, top: `calc(${n.pos.y}% + ${n.size === 'key' ? 36 : 28}px)` }}>{n.name}</span>
                 </span>

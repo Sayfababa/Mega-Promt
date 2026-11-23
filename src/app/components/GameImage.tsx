@@ -3,6 +3,8 @@
  * styled placeholder (initials + category colour + silhouette) so the game stays fully usable.
  */
 import { useState, type CSSProperties } from 'react';
+import { assetUrl } from '../assets';
+import type { Rarity } from '../../engine/types';
 
 export type ImageCategory = 'item' | 'unique' | 'monster' | 'boss' | 'class' | 'skill' | 'material' | 'dungeon' | 'background' | 'slot' | 'passive';
 
@@ -43,11 +45,24 @@ interface Props {
   /** placeholder without the silhouette overlay */
   flat?: boolean;
   decorative?: boolean;
+  /** rarity frame overlay (ui/frames/rarity_*) — only drawn when the frame image exists */
+  frame?: Rarity;
+  corrupted?: boolean;
 }
 
-export function GameImage({ icon, alt, category, size = 48, width, height, color, className, flat, decorative }: Props) {
+export function GameImage({ icon, alt, category, size = 48, width, height, color, className, flat, decorative, frame, corrupted }: Props) {
+  const listed = assetUrl(icon); // undefined = list unavailable → probe
   const known = missing.get(icon);
-  const [ext, setExt] = useState<'webp' | 'png' | 'none'>(known === 'none' ? 'none' : known === 'png' ? 'png' : 'webp');
+  const initial: 'webp' | 'png' | 'none' = listed === null ? 'none' : listed ? (listed.endsWith('.png') ? 'png' : 'webp') : known === 'none' ? 'none' : known === 'png' ? 'png' : 'webp';
+  const [ext, setExt] = useState<'webp' | 'png' | 'none'>(initial);
+  const frameUrl = frame ? assetUrl(`ui/frames/rarity_${frame}`) : null;
+  const corruptUrl = corrupted ? assetUrl('ui/frames/rarity_corrupt') : null;
+  const overlays = (
+    <>
+      {frameUrl && <img className="gimg-frame" src={frameUrl} alt="" aria-hidden />}
+      {corruptUrl && <img className="gimg-frame" src={corruptUrl} alt="" aria-hidden />}
+    </>
+  );
   const w = width ?? size;
   const h = height ?? size;
   const style: CSSProperties = { width: w, height: h };
@@ -56,6 +71,7 @@ export function GameImage({ icon, alt, category, size = 48, width, height, color
     return (
       <span className={`gimg ph ${flat || category === 'background' ? 'flat' : ''} ${className ?? ''}`} style={phStyle} role={decorative ? undefined : 'img'} aria-label={decorative ? undefined : alt} aria-hidden={decorative || undefined} title={decorative ? undefined : alt} data-placeholder={icon}>
         {category !== 'background' && <span className="ph-glyph">{initials(alt)}</span>}
+        {overlays}
       </span>
     );
   }
@@ -73,6 +89,7 @@ export function GameImage({ icon, alt, category, size = 48, width, height, color
           setExt(next);
         }}
       />
+      {overlays}
     </span>
   );
 }

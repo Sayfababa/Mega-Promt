@@ -45,7 +45,7 @@ export function ItemTooltip({ item, highlightAffix, testId }: { item: ItemInstan
   return (
     <div className={`tooltip frame-${item.rarity}`} data-testid={testId}>
       <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
-        <GameImage icon={itemIcon(item)} alt={itemName(item)} category={unique ? 'unique' : 'item'} size={56} color={`var(--r-${item.rarity})`} />
+        <GameImage icon={itemIcon(item)} alt={itemName(item)} category={unique ? 'unique' : 'item'} size={56} color={`var(--r-${item.rarity})`} frame={item.rarity} corrupted={item.corrupted} />
         <div style={{ minWidth: 0 }}>
           <p className="tt-name" data-testid="tt-name">{itemName(item)}</p>
           <div className="tt-sub">
@@ -129,7 +129,7 @@ export function ItemCell({ item, selected, onSelect, testId }: { item: ItemInsta
   const label = `${itemName(item)} (${RARITY_LABEL[item.rarity]})`;
   return (
     <button className={`cell filled frame-${item.rarity} ${selected ? 'selected' : ''}`} onClick={onSelect} aria-pressed={selected} aria-label={label} title={label} data-testid={testId} data-rarity={item.rarity}>
-      <GameImage icon={itemIcon(item)} alt={itemName(item)} category={item.uniqueId ? 'unique' : 'item'} size={44} color={`var(--r-${item.rarity})`} decorative />
+      <GameImage icon={itemIcon(item)} alt={itemName(item)} category={item.uniqueId ? 'unique' : 'item'} size={44} color={`var(--r-${item.rarity})`} frame={item.rarity} corrupted={item.corrupted} decorative />
       <span className="cell-rar">{RARITY_LABEL[item.rarity].slice(0, 3).toUpperCase()}</span>
       {item.locked && <span className="cell-lock" aria-label="gesperrt">🔒</span>}
     </button>

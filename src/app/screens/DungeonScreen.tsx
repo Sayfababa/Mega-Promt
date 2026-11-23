@@ -1,3 +1,5 @@
+import { eligibleBases } from '../../engine/loot/generator';
+import type { BaseGroup } from '../../engine/types';
 import { useMemo, useState } from 'react';
 import { B } from '../../content/balance';
 import { DUNGEONS } from '../../content/dungeons/dungeons';
@@ -41,7 +43,9 @@ export function DungeonScreen() {
   const bossIds = d.encounters.filter((e) => e.type === 'boss').map((e) => e.monsterId);
   const maxIlvl = level + Math.max(...types.map((t) => B.ilvlOffset[t][1]));
   const uniques = UNIQUES.filter((u) => u.dropSource === 'world' || bossIds.includes(u.dropSource));
-  const totalW = Object.values(d.baseWeights).reduce((a, b) => a + b, 0);
+  // effective group weights: groups without eligible bases at this level are renormalised away (D-083)
+  const groupW = (Object.entries(d.baseWeights) as [BaseGroup, number][]).filter(([g, w]) => w > 0 && eligibleBases({ baseFamilies: d.baseFamilies, monsterLevel: level }, g).length > 0);
+  const totalW = groupW.reduce((a, [, w]) => a + w, 0);
 
   return (
     <div>
@@ -136,7 +140,8 @@ export function DungeonScreen() {
                 </tbody>
               </table>
               <h4 style={{ marginTop: '0.8rem' }}>Basisgruppen</h4>
-              <p style={{ fontSize: '0.86rem' }}>{Object.entries(d.baseWeights).map(([g, w]) => `${g === 'weapon' ? 'Waffen' : g === 'armour' ? 'Rüstung' : g === 'jewellery' ? 'Schmuck' : 'Relikte'} ${pct(w / totalW, 0)}`).join(' · ')}</p>
+              {groupW.length < Object.values(d.baseWeights).filter((w) => w > 0).length && <p className="dim" style={{ fontSize: '0.78rem' }}>Gruppen ohne verfügbare Basis (z. B. Relikte im Vertical Slice) sind herausgerechnet.</p>}
+              <p style={{ fontSize: '0.86rem' }}>{groupW.map(([g, w]) => `${g === 'weapon' ? 'Waffen' : g === 'armour' ? 'Rüstung' : g === 'jewellery' ? 'Schmuck' : 'Relikte'} ${pct(w / totalW, 0)}`).join(' · ')}</p>
               <h4>Materialien je Sieg</h4>
               <ul style={{ fontSize: '0.86rem', margin: 0, paddingLeft: '1.2rem' }}>
                 {types.includes('normal') && <li>Normal: {B.materials.normalDust}× {MATERIAL_LABEL.FORGE_DUST}</li>}

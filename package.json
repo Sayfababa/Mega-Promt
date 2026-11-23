@@ -11,7 +11,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "balance": "tsx src/tooling/runBalance.ts"
+    "balance": "tsx src/tooling/runBalance.ts",
+    "assets:check": "tsx src/tooling/checkAssets.ts",
+    "predev": "tsx src/tooling/checkAssets.ts",
+    "prebuild": "tsx src/tooling/checkAssets.ts"
   },
   "dependencies": {
     "dexie": "^4.4.7",

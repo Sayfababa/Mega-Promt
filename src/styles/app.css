@@ -333,3 +333,23 @@ dl.kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
 .cols > .panel + .panel, .grid-2 > .panel + .panel, .grid-3 > .panel + .panel { margin-top: 0; }
 .shell { background: linear-gradient(90deg, #13100e 0, #13100e var(--nav-w), transparent var(--nav-w)); }
 @media (max-width: 900px) { .shell { background: none; } }
+
+/* ------------------------------------------------------------------ image assets (only active when files exist) */
+.gimg-frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.brand-logo { height: 34px; width: auto; display: block; }
+.status-chip { display: inline-flex; align-items: center; gap: 0.25em; }
+.tex-panel .panel { background-image: linear-gradient(180deg, rgba(38, 34, 30, 0.80), rgba(24, 21, 18, 0.88)), var(--tex-panel); background-size: auto, 512px 512px; }
+.tex-buttons button:not(.ghost):not(.node) { background-image: var(--tex-btn); background-size: 100% 100%; background-color: transparent; }
+.tex-buttons button:not(.ghost):not(.node):hover:not(:disabled) { background-image: var(--tex-btn-hover, var(--tex-btn)); }
+.tex-buttons button:not(.ghost):not(.node):active:not(:disabled) { background-image: var(--tex-btn-pressed, var(--tex-btn)); }
+.tex-buttons button:not(.ghost):not(.node):disabled { background-image: var(--tex-btn-disabled, var(--tex-btn)); }
+.tex-xp .bar.xp { background: var(--tex-xp-frame) center / 100% 100% no-repeat; }
+.tex-xp .bar.xp .fill { background: var(--tex-xp-fill) left center / auto 100% repeat-x; }
+.tex-talent .node { background: var(--tex-talent-small-off) center / contain no-repeat; border-color: transparent; }
+.tex-talent .node.on { background-image: var(--tex-talent-small-on); }
+.tex-talent .node.medium { background-image: var(--tex-talent-medium-off); }
+.tex-talent .node.medium.on { background-image: var(--tex-talent-medium-on); }
+.tex-talent .node.key { background-image: var(--tex-talent-key-off); }
+.tex-talent .node.key.on { background-image: var(--tex-talent-key-on); }
+.tex-talent .node.root { background-image: var(--tex-talent-root-off); }
+.tex-talent .node.root.on { background-image: var(--tex-talent-root-on); }

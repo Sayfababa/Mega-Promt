@@ -13,6 +13,7 @@ Verbindliche Spezifikation: [`spec/DARKFORGE_ULTRA_MASTER_PROMPT_DE.md`](spec/DA
 | `npm test` | Unit-, Property- und Regressionstests (Vitest, fast-check) |
 | `npm run test:e2e` | Playwright-End-to-End (Meilenstein-Durchlauf) |
 | `npm run balance` | Balance-Simulation → `reports/` (`DF_SEEDS`, `DF_BOTS` steuern den Umfang) |
+| `npm run assets:check` | Bilder in `public/assets/` prüfen (Größe, Transparenz, fehlend) und Ladeliste schreiben |
 | `npx tsx src/tooling/updateGold.ts` | Gold-Regression-Hashes neu schreiben (nur nach bewusster, protokollierter Änderung) |
 
 ## Architektur
@@ -42,4 +43,4 @@ Balance-Änderungen nur über `src/content/balance.ts` mit Eintrag in `BALANCE_C
 
 Die vollständige Liste der benötigten Bilder mit Pfaden, Größen, Stilleitfaden und Prompt-Vorlagen
 steht in [`docs/ASSETS.md`](docs/ASSETS.md). Bilder kommen nach `public/assets/<icon>.webp`;
-fehlende Bilder werden durch Platzhalter ersetzt.
+fehlende Bilder werden durch Platzhalter ersetzt. Nach dem Ablegen `npm run assets:check` ausführen (läuft automatisch vor `dev`/`build`); Ablauf in [`public/assets/README.md`](public/assets/README.md).

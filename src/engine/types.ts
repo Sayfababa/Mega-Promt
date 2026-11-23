@@ -285,6 +285,8 @@ export interface PassiveNode {
   edges: string[];
   text: string;
   pos: { x: number; y: number };
+  /** asset key (docs/ASSETS.md) — defaults to passives/<id> */
+  icon?: string;
 }
 
 // ---------------------------------------------------------------- monsters

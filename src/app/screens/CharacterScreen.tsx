@@ -32,7 +32,7 @@ export function CharacterScreen() {
     return (
       <button key={s} className={`slot-btn ${it ? `frame-${it.rarity}` : ''}`} aria-pressed={slot === s} onClick={() => setSlot(s)} data-testid={`slot-${s}`} data-item={it ? it.uid : ''}>
         {it ? (
-          <GameImage icon={itemIcon(it)} alt={itemName(it)} category={it.uniqueId ? 'unique' : 'item'} size={48} color={`var(--r-${it.rarity})`} decorative />
+          <GameImage icon={itemIcon(it)} alt={itemName(it)} category={it.uniqueId ? 'unique' : 'item'} size={48} color={`var(--r-${it.rarity})`} frame={it.rarity} corrupted={it.corrupted} decorative />
         ) : (
           <GameImage icon={SLOT_ICON[s]} alt={SLOT_LABEL[s]} category="slot" size={48} decorative />
         )}

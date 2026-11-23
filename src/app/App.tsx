@@ -1,3 +1,5 @@
+import { GameImage } from './components/GameImage';
+import { assetUrl, hasAsset } from './assets';
 import { useEffect } from 'react';
 import { useGame, type ScreenId } from './store/gameStore';
 import { Toasts } from './components/common';
@@ -83,10 +85,10 @@ export function App() {
   return (
     <div className="shell">
       <header className="topbar">
-        <div className="brand">DARK<span>FORGE</span></div>
+        <div className="brand">{hasAsset('ui/logo_darkforge') ? <img className="brand-logo" src={assetUrl('ui/logo_darkforge')!} alt="DARKFORGE" /> : <>DARK<span>FORGE</span></>}</div>
         <div className="topstat"><span>Held</span><strong data-testid="top-name">{c.name}</strong></div>
         <div className="topstat"><span>Stufe</span><strong data-testid="top-level">{c.level}</strong></div>
-        <div className="topstat"><span>Gold</span><strong data-testid="top-gold" className="num">{game.gold}</strong></div>
+        <div className="topstat">{hasAsset('ui/currency_gold') ? <GameImage icon="ui/currency_gold" alt="Gold" category="material" size={20} flat /> : <span>Gold</span>}<strong data-testid="top-gold" className="num">{game.gold}</strong></div>
         <span className="save-pill" data-status={saveStatus} data-testid="save-status" aria-live="polite">{SAVE_TEXT[saveStatus]}</span>
       </header>
       <nav className="nav" aria-label="Hauptnavigation">

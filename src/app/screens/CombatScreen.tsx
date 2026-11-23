@@ -1,3 +1,5 @@
+import { hasAsset } from '../assets';
+import { statusIcon } from '../../content/assets';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { DUNGEON_BY_ID } from '../../content/dungeons/dungeons';
 import { MONSTER_BY_ID } from '../../content/monsters/monsters';
@@ -225,7 +227,7 @@ function ResolvedRun({ run }: { run: RunState }) {
         <div className="fighter player">
           <div className="fname">{c.name}</div>
           <GameImage icon={`${CLASS_BY_ID[c.classId]!.icon}_full`} alt={c.name} category="class" width={120} height={170} className="portrait" />
-          <div className="statuses">{statuses('player').map(([s, n]) => <span key={s} className={`status-chip ${s}`}>{statusName(s)}{n > 1 ? ` ×${n}` : ''}</span>)}</div>
+          <div className="statuses">{statuses('player').map(([s, n]) => <span key={s} className={`status-chip ${s}`}>{hasAsset(statusIcon(s)) && <GameImage icon={statusIcon(s)} alt="" category="skill" size={16} decorative flat />}{statusName(s)}{n > 1 ? ` ×${n}` : ''}</span>)}</div>
           <Bar kind="barrier" value={pBar} max={pMax} label={`Barriere ${pBar}`} animate={animations} />
           <Bar kind="hp" value={pHp} max={pMax} label={`${Math.max(0, Math.round(pHp))} / ${pMax}`} animate={animations} testId="player-hp" />
           <Bar kind="mana" value={pMana} max={pManaMax} label={`Mana ${Math.round(pMana)} / ${pManaMax}`} animate={animations} />
@@ -238,7 +240,7 @@ function ResolvedRun({ run }: { run: RunState }) {
         <div className="fighter enemy">
           <div className="fname">{rep.enemyName} <small className="dim">({ENCOUNTER_LABEL[encDef.type]})</small></div>
           <GameImage icon={monster.icon} alt={monster.name} category={encDef.type === 'boss' ? 'boss' : 'monster'} width={140} height={170} className="portrait" />
-          <div className="statuses">{statuses('enemy0').map(([s, n]) => <span key={s} className={`status-chip ${s}`}>{statusName(s)}{n > 1 ? ` ×${n}` : ''}</span>)}</div>
+          <div className="statuses">{statuses('enemy0').map(([s, n]) => <span key={s} className={`status-chip ${s}`}>{hasAsset(statusIcon(s)) && <GameImage icon={statusIcon(s)} alt="" category="skill" size={16} decorative flat />}{statusName(s)}{n > 1 ? ` ×${n}` : ''}</span>)}</div>
           <Bar kind="barrier" value={eBar} max={eMax} label={`Barriere ${eBar}`} animate={animations} />
           <Bar kind="hp" value={eHp} max={eMax} label={`${Math.max(0, Math.round(eHp))} / ${eMax}`} animate={animations} testId="enemy-hp" />
         </div>

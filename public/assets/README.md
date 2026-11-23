@@ -32,4 +32,18 @@ public/assets/
 
 ## Fehlende Bilder
 
-Fehlt eine Datei, zeigt die App automatisch einen **Fallback-Platzhalter** (neutrales Symbol bzw. Farbfläche der Kategorie) an. Das Spiel bleibt ohne jedes Bild voll spielbar; Bilder können jederzeit einzeln ergänzt werden — ein Neuladen der Seite genügt.
+Fehlt eine Datei, zeigt die App automatisch einen **Fallback-Platzhalter** (Initialen + Kategoriefarbe) an. Das Spiel bleibt ohne jedes Bild voll spielbar; Bilder können jederzeit einzeln ergänzt werden.
+
+## Bilder einfügen — Ablauf
+
+1. Datei unter dem Pfad aus `docs/ASSETS.md` ablegen, z. B. `public/assets/monsters/boss_gravelord.webp`.
+2. `npm run assets:check` ausführen (läuft auch automatisch vor `npm run dev` und `npm run build`).
+   - prüft Größe (exakt oder ganzzahliges Vielfaches, z. B. 256×256 statt 128×128), Seitenverhältnis und Transparenz,
+   - meldet fehlende und unbekannte Dateien,
+   - schreibt `available.json` — die App lädt **nur** dort gelistete Bilder (keine 404-Anfragen),
+   - Detailbericht: `reports/assets.md` (alle fehlenden Bilder als Tabelle).
+3. Seite neu laden. Bei laufendem `npm run dev` nach neuen Dateien `npm run assets:check` erneut ausführen.
+
+`npm run assets:check -- --strict` bricht mit Fehlercode ab, solange P1-Bilder fehlen oder fehlerhaft sind (für CI).
+
+UI-Texturen (Panel, Buttons, XP-Leiste, Talent- und Seltenheitsrahmen, Logo, Favicon) werden nur aktiviert, wenn die Datei vorhanden ist; vorher bleibt das CSS-Design.
