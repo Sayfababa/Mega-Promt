@@ -3,6 +3,16 @@
 Alle Balance-Änderungen werden hier mit altem Wert, neuem Wert und Beleg (Report/Kennzahl) festgehalten.
 Werte stehen ausschließlich in `src/content/balance.ts`.
 
+## Entscheidungen des Auftraggebers (2026-11-23)
+
+| Befund | Entscheidung | Folge |
+|---|---|---|
+| B-001 Mana-Haushalt | **So lassen.** Der Mana-Engpass ist gewollt; Spieler steuern ihn über Skill-Prioritäten. | OOM-Ziel < 20 % aus §18.1 gilt für den Wächter als akzeptierte Spec-Abweichung. Der Report warnt weiter. |
+| B-002 Build-Parität Lv15 | **So lassen.** Der Schild-Build ist bewusst langsamer und dafür sicherer. | Die Paritätsregel ±20–25 % wird für den Slice als akzeptierte Abweichung geführt. |
+| B-005 Unique-Drop-Modell | **Spec-Modell behalten** (erst Basis, sonst Rare-Fallback). | Uniques bleiben sehr selten, bis Phase 2 weitere Uniques liefert. Kandidaten und echte Uniques werden weiter getrennt berichtet. |
+
+Damit bleibt **balanceVersion 1** gültig, und es wurde keine Konstante geändert.
+
 ## balanceVersion 1 — Startwerte der Spezifikation (unverändert)
 
 Keine Zahl wurde gegenüber der Spezifikation verändert. Die folgenden Befunde stammen aus `npm run balance`

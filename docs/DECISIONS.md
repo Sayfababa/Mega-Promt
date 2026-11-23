@@ -592,3 +592,5 @@ Die folgenden Einträge sind jetzt **entschieden und im Code umgesetzt**. Wo die
 | D-087 *(neu)* | Skill-Freischaltung zum Onboarding: Spaltender Hieb 1, Rüstungsbruch 2, Schildwall 4, Bluternte 6, Kampfrausch 8, Letztes Bollwerk 10. Skill-Level 2–5 noch nicht erwerbbar (D-049 bleibt offen). | `content/skills/guardian.ts` |
 | D-088 *(neu)* | Dungeonstufe wählbar zwischen Mindeststufe und `höchste geschaffte + 1`; jeder Dungeon ist ab seiner Mindeststufe sofort betretbar (Krypta ab 8 → „zuvor schwieriger Boss“-Erlebnis). | `state/commands.ts` |
 | D-089 *(neu)* | Rift-Probe nur in Balance-Tooling/Buildlabor, UI hält Rifts bis Lv60 gesperrt (entspricht Vorschlag D-050). | `endgame/rifts.ts` |
+
+| D-090 *(neu)* | Auftraggeber-Entscheidung 2026-11-23: Mana-Engpass (B-001), Build-Parität Lv15 (B-002) und Unique-Drop-Modell (B-005) bleiben unverändert; siehe `BALANCE_CHANGELOG.md`. | — |
