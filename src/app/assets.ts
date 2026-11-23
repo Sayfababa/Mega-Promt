@@ -13,7 +13,7 @@ export function assetsKnown(): boolean {
 export function assetUrl(icon: string): string | null | undefined {
   if (!available) return undefined;
   const ext = available[icon];
-  return ext ? `/assets/${icon}.${ext}` : null;
+  return ext ? `${import.meta.env.BASE_URL}assets/${icon}.${ext}` : null;
 }
 
 export function hasAsset(icon: string): boolean {
@@ -66,7 +66,7 @@ export async function loadAvailableAssets(timeoutMs = 1500): Promise<void> {
   try {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-    const res = await fetch('/assets/available.json', { cache: 'no-cache', signal: ctrl.signal });
+    const res = await fetch(`${import.meta.env.BASE_URL}assets/available.json`, { cache: 'no-cache', signal: ctrl.signal });
     clearTimeout(timer);
     if (!res.ok) return;
     const data: unknown = await res.json();

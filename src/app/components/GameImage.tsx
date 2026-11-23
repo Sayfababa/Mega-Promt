@@ -78,7 +78,7 @@ export function GameImage({ icon, alt, category, size = 48, width, height, color
   return (
     <span className={`gimg ${className ?? ''}`} style={style}>
       <img
-        src={`/assets/${icon}.${ext}`}
+        src={`${import.meta.env.BASE_URL}assets/${icon}.${ext}`}
         alt={decorative ? '' : alt}
         width={w}
         height={h}
